@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import Optional
+
+from pydantic import BaseModel, ConfigDict
 
 
 class StudentCreate(BaseModel):
@@ -18,3 +19,5 @@ class StudentCreate(BaseModel):
 
 class StudentResponse(StudentCreate):
     id: int
+
+    model_config = ConfigDict(from_attributes=True)
