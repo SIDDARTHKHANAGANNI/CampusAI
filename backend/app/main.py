@@ -3,7 +3,14 @@ from fastapi import FastAPI
 from backend.app.api.students import router as student_router
 from backend.app.database.database import Base, engine
 from backend.app.models.student import Student
-
+from backend.app.models.academic import AcademicRecord
+from backend.app.models.skill import Skill
+from backend.app.models.project import Project
+from backend.app.models.career_goal import CareerGoal
+from backend.app.api.academics import router as academics_router
+from backend.app.api.skills import router as skills_router
+from backend.app.api.projects import router as projects_router
+from backend.app.api.career_goals import router as career_goals_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -16,7 +23,10 @@ app = FastAPI(
 
 
 app.include_router(student_router)
-
+app.include_router(academics_router)
+app.include_router(skills_router)
+app.include_router(projects_router)
+app.include_router(career_goals_router)
 
 @app.get("/")
 def root():

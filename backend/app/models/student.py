@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Float, Integer, String
+from sqlalchemy.orm import relationship
 
 from backend.app.database.database import Base
 
@@ -23,3 +24,29 @@ class Student(Base):
     backlogs = Column(Integer, default=0)
 
     target_role = Column(String, nullable=False)
+
+    # Relationships
+
+    academic_records = relationship(
+        "AcademicRecord",
+        back_populates="student",
+        cascade="all, delete-orphan"
+    )
+
+    skills = relationship(
+        "Skill",
+        back_populates="student",
+        cascade="all, delete-orphan"
+    )
+
+    projects = relationship(
+        "Project",
+        back_populates="student",
+        cascade="all, delete-orphan"
+    )
+
+    career_goals = relationship(
+    "CareerGoal",
+    back_populates="student",
+    cascade="all, delete-orphan"
+)
