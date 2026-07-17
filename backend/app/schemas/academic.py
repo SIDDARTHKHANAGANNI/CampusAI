@@ -1,12 +1,26 @@
-from pydantic import BaseModel, ConfigDict
 from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AcademicCreate(BaseModel):
-    semester: int
-    semester_gpa: float
-    attendance: Optional[float] = None
-    backlogs: int = 0
+    semester: int = Field(ge=1, le=12)
+
+    semester_gpa: float = Field(
+        ge=0,
+        le=10
+    )
+
+    attendance: Optional[float] = Field(
+        default=None,
+        ge=0,
+        le=100
+    )
+
+    backlogs: int = Field(
+        default=0,
+        ge=0
+    )
 
 
 class AcademicResponse(AcademicCreate):

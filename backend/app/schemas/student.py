@@ -1,7 +1,6 @@
-from typing import Optional
+from typing import List, Optional
 
-from pydantic import BaseModel, ConfigDict
-from typing import List
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from backend.app.schemas.academic import AcademicResponse
 from backend.app.schemas.skill import SkillResponse
@@ -10,24 +9,49 @@ from backend.app.schemas.career_goal import CareerGoalResponse
 
 
 class StudentCreate(BaseModel):
-    name: str
-    email: str
-    college: str
-    degree: str
-    branch: str
-    current_year: int
-    graduation_year: int
-    cgpa: float
-    attendance: Optional[float] = None
-    backlogs: int = 0
-    target_role: str
+    name: str = Field(min_length=2, max_length=100)
+
+    email: EmailStr
+
+    college: str = Field(min_length=2, max_length=200)
+    degree: str = Field(min_length=2, max_length=100)
+    branch: str = Field(min_length=2, max_length=100)
+
+    current_year: int = Field(ge=1, le=6)
+
+    graduation_year: int = Field(
+        ge=2020,
+        le=2040
+    )
+
+    cgpa: float = Field(
+        ge=0,
+        le=10
+    )
+
+    attendance: Optional[float] = Field(
+        default=None,
+        ge=0,
+        le=100
+    )
+
+    backlogs: int = Field(
+        default=0,
+        ge=0
+    )
+
+    target_role: str = Field(
+        min_length=2,
+        max_length=100
+    )
 
 
 class StudentResponse(StudentCreate):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
-    
+
+
 class StudentProfileResponse(StudentResponse):
     academic_records: List[AcademicResponse] = []
     skills: List[SkillResponse] = []

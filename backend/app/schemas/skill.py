@@ -1,11 +1,20 @@
-from pydantic import BaseModel, ConfigDict
 from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class SkillCreate(BaseModel):
-    name: str
-    category: Optional[str] = None
-    proficiency: str
+    name: str = Field(min_length=1, max_length=100)
+
+    category: Optional[str] = Field(
+        default=None,
+        max_length=100
+    )
+
+    proficiency: str = Field(
+        min_length=1,
+        max_length=50
+    )
 
 
 class SkillResponse(SkillCreate):

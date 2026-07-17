@@ -57,3 +57,53 @@ def get_academic_records(
         .filter(AcademicRecord.student_id == student_id)
         .all()
     )
+    
+@router.put(
+    "/academics/{academic_id}",
+    response_model=AcademicResponse
+)
+def update_academic(
+    academic_id: int,
+    academic_data: AcademicCreate,
+    db: Session = Depends(get_db)
+):
+    record = db.query(AcademicRecord).filter(
+        AcademicRecord.id == academic_id
+    ).first()
+
+    if not record:
+        raise HTTPException(
+            status_code=404,
+            detail="Academic record not found"
+        )
+
+    for key, value in academic_data.model_dump().items():
+        setattr(record, key, value)
+
+    db.commit()
+    db.refresh(record)
+
+    return record
+
+@router.delete("/academics/{academic_id}")
+def delete_academic(
+    academic_id: int,
+    db: Session = Depends(get_db)
+):
+    record = db.query(AcademicRecord).filter(
+        AcademicRecord.id == academic_id
+    ).first()
+
+    if not record:
+        raise HTTPException(
+            status_code=404,
+            detail="Academic record not found"
+        )
+
+    db.delete(record)
+    db.commit()
+
+    return {
+        "message": "Academic record deleted successfully"
+    }
+    
