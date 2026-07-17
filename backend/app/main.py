@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
 from backend.app.api.students import router as student_router
-from backend.app.database.database import Base, engine
 from backend.app.models.student import Student
 from backend.app.models.academic import AcademicRecord
 from backend.app.models.skill import Skill
@@ -13,7 +12,7 @@ from backend.app.api.projects import router as projects_router
 from backend.app.api.career_goals import router as career_goals_router
 from fastapi.middleware.cors import CORSMiddleware
 
-Base.metadata.create_all(bind=engine)
+
 
 
 app = FastAPI(
