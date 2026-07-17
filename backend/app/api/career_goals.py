@@ -46,3 +46,17 @@ def add_career_goal(
     db.refresh(career_goal)
 
     return career_goal
+
+@router.get(
+    "/{student_id}/career-goals",
+    response_model=list[CareerGoalResponse]
+)
+def get_career_goals(
+    student_id: int,
+    db: Session = Depends(get_db)
+):
+    return (
+        db.query(CareerGoal)
+        .filter(CareerGoal.student_id == student_id)
+        .all()
+    )

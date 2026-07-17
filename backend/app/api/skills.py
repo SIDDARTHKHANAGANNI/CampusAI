@@ -43,3 +43,17 @@ def add_skill(
     db.refresh(new_skill)
 
     return new_skill
+
+@router.get(
+    "/{student_id}/skills",
+    response_model=list[SkillResponse]
+)
+def get_skills(
+    student_id: int,
+    db: Session = Depends(get_db)
+):
+    return (
+        db.query(Skill)
+        .filter(Skill.student_id == student_id)
+        .all()
+    )

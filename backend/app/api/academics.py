@@ -43,3 +43,17 @@ def add_academic_record(
     db.refresh(record)
 
     return record
+
+@router.get(
+    "/{student_id}/academics",
+    response_model=list[AcademicResponse]
+)
+def get_academic_records(
+    student_id: int,
+    db: Session = Depends(get_db)
+):
+    return (
+        db.query(AcademicRecord)
+        .filter(AcademicRecord.student_id == student_id)
+        .all()
+    )

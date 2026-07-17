@@ -43,3 +43,17 @@ def add_project(
     db.refresh(new_project)
 
     return new_project
+
+@router.get(
+    "/{student_id}/projects",
+    response_model=list[ProjectResponse]
+)
+def get_projects(
+    student_id: int,
+    db: Session = Depends(get_db)
+):
+    return (
+        db.query(Project)
+        .filter(Project.student_id == student_id)
+        .all()
+    )

@@ -11,6 +11,7 @@ from backend.app.api.academics import router as academics_router
 from backend.app.api.skills import router as skills_router
 from backend.app.api.projects import router as projects_router
 from backend.app.api.career_goals import router as career_goals_router
+from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
@@ -19,6 +20,16 @@ app = FastAPI(
     title="CampusAI API",
     description="Backend API for CampusAI Student Success & Career Platform",
     version="0.3.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

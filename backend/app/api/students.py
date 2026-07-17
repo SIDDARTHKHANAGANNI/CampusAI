@@ -4,7 +4,11 @@ from sqlalchemy.orm import Session
 from backend.app.database.database import get_db
 from backend.app.models.student import Student
 from backend.app.schemas.student import StudentCreate, StudentResponse
-
+from backend.app.schemas.student import (
+    StudentCreate,
+    StudentResponse,
+    StudentProfileResponse
+)
 
 router = APIRouter(
     prefix="/students",
@@ -41,6 +45,27 @@ def get_all_students(db: Session = Depends(get_db)):
     students = db.query(Student).all()
     return students
 
+@router.get(
+    "/{student_id}/profile",
+    response_model=StudentProfileResponse
+)
+def get_student_profile(
+    student_id: int,
+    db: Session = Depends(get_db)
+):
+    student = (
+        db.query(Student)
+        .filter(Student.id == student_id)
+        .first()
+    )
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student not found"
+        )
+
+    return student
 
 @router.get("/{student_id}", response_model=StudentResponse)
 def get_student(student_id: int, db: Session = Depends(get_db)):
