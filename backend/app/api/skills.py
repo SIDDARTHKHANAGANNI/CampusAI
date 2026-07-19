@@ -5,13 +5,88 @@ from backend.app.database.database import get_db
 from backend.app.models.student import Student
 from backend.app.models.skill import Skill
 from backend.app.schemas.skill import SkillCreate, SkillResponse
-
+from backend.app.models.user import User
+from backend.app.core.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/students",
     tags=["Skills"]
 )
+# DELETE SKILL
+@router.delete("/skills/{skill_id}")
+def delete_skill(
+    skill_id: int,
+    db: Session = Depends(get_db)
+):
+    skill = db.query(Skill).filter(
+        Skill.id == skill_id
+    ).first()
 
+    if not skill:
+        raise HTTPException(
+            status_code=404,
+            detail="Skill not found"
+        )
+
+    db.delete(skill)
+    db.commit()
+
+    return {
+        "message": "Skill deleted successfully"
+    }
+    
+@router.get(
+    "/me/skills",
+    response_model=list[SkillResponse]
+)
+def get_my_skills(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    return db.query(Skill).filter(
+        Skill.student_id == student.id
+    ).all()
+    
+@router.post(
+    "/me/skills",
+    response_model=SkillResponse,
+    status_code=201
+)
+def add_my_skill(
+    skill: SkillCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    new_skill = Skill(
+        student_id=student.id,
+        **skill.model_dump()
+    )
+
+    db.add(new_skill)
+    db.commit()
+    db.refresh(new_skill)
+
+    return new_skill
 
 # CREATE SKILL
 @router.post(
@@ -101,25 +176,9 @@ def update_skill(
     return skill
 
 
-# DELETE SKILL
-@router.delete("/skills/{skill_id}")
-def delete_skill(
-    skill_id: int,
-    db: Session = Depends(get_db)
-):
-    skill = db.query(Skill).filter(
-        Skill.id == skill_id
-    ).first()
 
-    if not skill:
-        raise HTTPException(
-            status_code=404,
-            detail="Skill not found"
-        )
-
-    db.delete(skill)
+    db.add(new_skill)
     db.commit()
+    db.refresh(new_skill)
 
-    return {
-        "message": "Skill deleted successfully"
-    }
+    return new_skill

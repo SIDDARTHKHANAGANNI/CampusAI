@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
+from backend.app.models.user import User
+from backend.app.core.dependencies import get_current_user
 from backend.app.database.database import get_db
 from backend.app.models.student import Student
 from backend.app.schemas.student import StudentCreate, StudentResponse
@@ -44,6 +45,25 @@ def create_student(
 def get_all_students(db: Session = Depends(get_db)):
     students = db.query(Student).all()
     return students
+@router.get(
+    "/me/profile",
+    response_model=StudentProfileResponse
+)
+def get_my_profile(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    return student
 
 @router.get(
     "/{student_id}/profile",

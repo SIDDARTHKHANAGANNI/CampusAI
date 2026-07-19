@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
 from sqlalchemy.sql import func
-
+from sqlalchemy.orm import relationship
 from backend.app.database.database import Base
 
 
@@ -12,7 +12,12 @@ class User(Base):
         primary_key=True,
         index=True
     )
-
+    student = relationship(
+    "Student",
+    back_populates="user",
+    uselist=False,
+    cascade="all, delete-orphan"
+    )
     email = Column(
         String,
         unique=True,
