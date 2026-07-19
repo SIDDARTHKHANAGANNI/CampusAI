@@ -20,7 +20,12 @@ router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
-
+@router.get("/health")
+def auth_health():
+    return {
+        "status": "ok",
+        "service": "CampusAI Authentication"
+    }
 
 # REGISTER
 @router.post(
