@@ -4,13 +4,102 @@ from sqlalchemy.orm import Session
 from backend.app.database.database import get_db
 from backend.app.models.student import Student
 from backend.app.models.project import Project
+from backend.app.models.user import User
+from backend.app.core.dependencies import get_current_user
 from backend.app.schemas.project import ProjectCreate, ProjectResponse
-
 
 router = APIRouter(
     prefix="/students",
     tags=["Projects"]
 )
+
+@router.get(
+    "/me/projects",
+    response_model=list[ProjectResponse]
+)
+def get_my_projects(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    return db.query(Project).filter(
+        Project.student_id == student.id
+    ).all()
+    
+@router.post(
+    "/me/projects",
+    response_model=ProjectResponse,
+    status_code=201
+)
+def add_my_project(
+    project: ProjectCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    new_project = Project(
+        student_id=student.id,
+        **project.model_dump()
+    )
+
+    db.add(new_project)
+    db.commit()
+    db.refresh(new_project)
+
+    return new_project
+
+@router.delete("/me/projects/{project_id}")
+def delete_my_project(
+    project_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    project = db.query(Project).filter(
+        Project.id == project_id,
+        Project.student_id == student.id
+    ).first()
+
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found"
+        )
+
+    db.delete(project)
+    db.commit()
+
+    return {
+        "message": "Project deleted successfully"
+    }
+    
 
 
 # CREATE PROJECT

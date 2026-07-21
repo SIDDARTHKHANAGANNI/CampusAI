@@ -4,10 +4,9 @@ from sqlalchemy.orm import Session
 from backend.app.database.database import get_db
 from backend.app.models.student import Student
 from backend.app.models.career_goal import CareerGoal
-from backend.app.schemas.career_goal import (
-    CareerGoalCreate,
-    CareerGoalResponse
-)
+from backend.app.models.user import User
+from backend.app.core.dependencies import get_current_user
+from backend.app.schemas.career_goal import CareerGoalCreate, CareerGoalResponse
 
 
 router = APIRouter(
@@ -15,6 +14,93 @@ router = APIRouter(
     tags=["Career Goals"]
 )
 
+@router.get(
+    "/me/career-goals",
+    response_model=list[CareerGoalResponse]
+)
+def get_my_career_goals(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    return db.query(CareerGoal).filter(
+        CareerGoal.student_id == student.id
+    ).all()
+    
+@router.post(
+    "/me/career-goals",
+    response_model=CareerGoalResponse,
+    status_code=201
+)
+def add_my_career_goal(
+    career_goal: CareerGoalCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    new_career_goal = CareerGoal(
+        student_id=student.id,
+        **career_goal.model_dump()
+    )
+
+    db.add(new_career_goal)
+    db.commit()
+    db.refresh(new_career_goal)
+
+    return new_career_goal
+
+@router.delete("/me/career-goals/{career_goal_id}")
+def delete_my_career_goal(
+    career_goal_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    career_goal = db.query(CareerGoal).filter(
+        CareerGoal.id == career_goal_id,
+        CareerGoal.student_id == student.id
+    ).first()
+
+    if not career_goal:
+        raise HTTPException(
+            status_code=404,
+            detail="Career goal not found"
+        )
+
+    db.delete(career_goal)
+    db.commit()
+
+    return {
+        "message": "Career goal deleted successfully"
+    }
+    
 
 # CREATE CAREER GOAL
 @router.post(
