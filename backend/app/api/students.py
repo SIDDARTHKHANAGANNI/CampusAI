@@ -45,6 +45,8 @@ def create_student(
 def get_all_students(db: Session = Depends(get_db)):
     students = db.query(Student).all()
     return students
+
+
 @router.get(
     "/me/profile",
     response_model=StudentProfileResponse
@@ -64,6 +66,37 @@ def get_my_profile(
         )
 
     return student
+@router.post(
+    "/me/profile",
+    response_model=StudentResponse,
+    status_code=201
+)
+def create_my_profile(
+    student_data: StudentCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Check if this user already owns a student profile
+    existing_profile = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if existing_profile:
+        raise HTTPException(
+            status_code=400,
+            detail="Student profile already exists"
+        )
+
+    new_student = Student(
+        user_id=current_user.id,
+        **student_data.model_dump()
+    )
+
+    db.add(new_student)
+    db.commit()
+    db.refresh(new_student)
+
+    return new_student
 
 @router.get(
     "/{student_id}/profile",
