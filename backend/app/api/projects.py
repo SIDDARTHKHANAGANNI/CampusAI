@@ -212,3 +212,42 @@ def delete_project(
     return {
         "message": "Project deleted successfully"
     }
+    
+@router.put(
+    "/me/projects/{project_id}",
+    response_model=ProjectResponse
+)
+def update_my_project(
+    project_id: int,
+    project_data: ProjectCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    project = db.query(Project).filter(
+        Project.id == project_id,
+        Project.student_id == student.id
+    ).first()
+
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found"
+        )
+
+    for key, value in project_data.model_dump().items():
+        setattr(project, key, value)
+
+    db.commit()
+    db.refresh(project)
+
+    return project

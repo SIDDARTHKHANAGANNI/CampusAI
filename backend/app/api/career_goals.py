@@ -212,3 +212,42 @@ def delete_career_goal(
     return {
         "message": "Career goal deleted successfully"
     }
+    
+@router.put(
+    "/me/career-goals/{career_goal_id}",
+    response_model=CareerGoalResponse
+)
+def update_my_career_goal(
+    career_goal_id: int,
+    career_goal_data: CareerGoalCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    career_goal = db.query(CareerGoal).filter(
+        CareerGoal.id == career_goal_id,
+        CareerGoal.student_id == student.id
+    ).first()
+
+    if not career_goal:
+        raise HTTPException(
+            status_code=404,
+            detail="Career goal not found"
+        )
+
+    for key, value in career_goal_data.model_dump().items():
+        setattr(career_goal, key, value)
+
+    db.commit()
+    db.refresh(career_goal)
+
+    return career_goal

@@ -183,3 +183,41 @@ def update_skill(
     db.refresh(new_skill)
 
     return new_skill
+@router.put(
+    "/me/skills/{skill_id}",
+    response_model=SkillResponse
+)
+def update_my_skill(
+    skill_id: int,
+    skill_data: SkillCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    skill = db.query(Skill).filter(
+        Skill.id == skill_id,
+        Skill.student_id == student.id
+    ).first()
+
+    if not skill:
+        raise HTTPException(
+            status_code=404,
+            detail="Skill not found"
+        )
+
+    for key, value in skill_data.model_dump().items():
+        setattr(skill, key, value)
+
+    db.commit()
+    db.refresh(skill)
+
+    return skill

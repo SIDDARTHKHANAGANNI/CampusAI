@@ -97,6 +97,33 @@ def create_my_profile(
     db.refresh(new_student)
 
     return new_student
+@router.put(
+    "/me/profile",
+    response_model=StudentResponse
+)
+def update_my_profile(
+    student_data: StudentCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    for key, value in student_data.model_dump().items():
+        setattr(student, key, value)
+
+    db.commit()
+    db.refresh(student)
+
+    return student
+
 
 @router.get(
     "/{student_id}/profile",

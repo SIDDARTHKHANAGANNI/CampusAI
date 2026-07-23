@@ -198,3 +198,41 @@ def delete_academic(
         "message": "Academic record deleted successfully"
     }
     
+@router.put(
+    "/me/academics/{academic_id}",
+    response_model=AcademicResponse
+)
+def update_my_academic(
+    academic_id: int,
+    academic_data: AcademicCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    student = db.query(Student).filter(
+        Student.user_id == current_user.id
+    ).first()
+
+    if not student:
+        raise HTTPException(
+            status_code=404,
+            detail="Student profile not found"
+        )
+
+    record = db.query(AcademicRecord).filter(
+        AcademicRecord.id == academic_id,
+        AcademicRecord.student_id == student.id
+    ).first()
+
+    if not record:
+        raise HTTPException(
+            status_code=404,
+            detail="Academic record not found"
+        )
+
+    for key, value in academic_data.model_dump().items():
+        setattr(record, key, value)
+
+    db.commit()
+    db.refresh(record)
+
+    return record
