@@ -103,36 +103,36 @@ def delete_my_project(
 
 
 # CREATE PROJECT
-@router.post(
-    "/{student_id}/projects",
-    response_model=ProjectResponse,
-    status_code=201
-)
-def add_project(
-    student_id: int,
-    project: ProjectCreate,
-    db: Session = Depends(get_db)
-):
-    student = db.query(Student).filter(
-        Student.id == student_id
-    ).first()
+# @router.post(
+#     "/{student_id}/projects",
+#     response_model=ProjectResponse,
+#     status_code=201
+# )
+# def add_project(
+#     student_id: int,
+#     project: ProjectCreate,
+#     db: Session = Depends(get_db)
+# ):
+#     student = db.query(Student).filter(
+#         Student.id == student_id
+#     ).first()
 
-    if not student:
-        raise HTTPException(
-            status_code=404,
-            detail="Student not found"
-        )
+#     if not student:
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Student not found"
+#         )
 
-    new_project = Project(
-        student_id=student_id,
-        **project.model_dump()
-    )
+#     new_project = Project(
+#         student_id=student_id,
+#         **project.model_dump()
+#     )
 
-    db.add(new_project)
-    db.commit()
-    db.refresh(new_project)
+#     db.add(new_project)
+#     db.commit()
+#     db.refresh(new_project)
 
-    return new_project
+#     return new_project
 
 
 # GET ALL PROJECTS OF A STUDENT
@@ -162,56 +162,56 @@ def get_projects(
 
 
 # UPDATE PROJECT
-@router.put(
-    "/projects/{project_id}",
-    response_model=ProjectResponse
-)
-def update_project(
-    project_id: int,
-    project_data: ProjectCreate,
-    db: Session = Depends(get_db)
-):
-    project = db.query(Project).filter(
-        Project.id == project_id
-    ).first()
+# @router.put(
+#     "/projects/{project_id}",
+#     response_model=ProjectResponse
+# )
+# def update_project(
+#     project_id: int,
+#     project_data: ProjectCreate,
+#     db: Session = Depends(get_db)
+# ):
+#     project = db.query(Project).filter(
+#         Project.id == project_id
+#     ).first()
 
-    if not project:
-        raise HTTPException(
-            status_code=404,
-            detail="Project not found"
-        )
+#     if not project:
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Project not found"
+#         )
 
-    for key, value in project_data.model_dump().items():
-        setattr(project, key, value)
+#     for key, value in project_data.model_dump().items():
+#         setattr(project, key, value)
 
-    db.commit()
-    db.refresh(project)
+#     db.commit()
+#     db.refresh(project)
 
-    return project
+#     return project
 
 
 # DELETE PROJECT
-@router.delete("/projects/{project_id}")
-def delete_project(
-    project_id: int,
-    db: Session = Depends(get_db)
-):
-    project = db.query(Project).filter(
-        Project.id == project_id
-    ).first()
+# @router.delete("/projects/{project_id}")
+# def delete_project(
+#     project_id: int,
+#     db: Session = Depends(get_db)
+# ):
+#     project = db.query(Project).filter(
+#         Project.id == project_id
+#     ).first()
 
-    if not project:
-        raise HTTPException(
-            status_code=404,
-            detail="Project not found"
-        )
+#     if not project:
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Project not found"
+#         )
 
-    db.delete(project)
-    db.commit()
+#     db.delete(project)
+#     db.commit()
 
-    return {
-        "message": "Project deleted successfully"
-    }
+#     return {
+#         "message": "Project deleted successfully"
+#     }
     
 @router.put(
     "/me/projects/{project_id}",

@@ -104,36 +104,36 @@ def delete_my_academic(
     }
     
     
-@router.post(
-    "/{student_id}/academics",
-    response_model=AcademicResponse,
-    status_code=201
-)
-def add_academic_record(
-    student_id: int,
-    academic: AcademicCreate,
-    db: Session = Depends(get_db)
-):
-    student = db.query(Student).filter(
-        Student.id == student_id
-    ).first()
+# @router.post(
+#     "/{student_id}/academics",
+#     response_model=AcademicResponse,
+#     status_code=201
+# )
+# def add_academic_record(
+#     student_id: int,
+#     academic: AcademicCreate,
+#     db: Session = Depends(get_db)
+# ):
+#     student = db.query(Student).filter(
+#         Student.id == student_id
+#     ).first()
 
-    if not student:
-        raise HTTPException(
-            status_code=404,
-            detail="Student not found"
-        )
+#     if not student:
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Student not found"
+#         )
 
-    record = AcademicRecord(
-        student_id=student_id,
-        **academic.model_dump()
-    )
+#     record = AcademicRecord(
+#         student_id=student_id,
+#         **academic.model_dump()
+#     )
 
-    db.add(record)
-    db.commit()
-    db.refresh(record)
+#     db.add(record)
+#     db.commit()
+#     db.refresh(record)
 
-    return record
+#     return record
 
 @router.get(
     "/{student_id}/academics",
@@ -149,54 +149,54 @@ def get_academic_records(
         .all()
     )
     
-@router.put(
-    "/academics/{academic_id}",
-    response_model=AcademicResponse
-)
-def update_academic(
-    academic_id: int,
-    academic_data: AcademicCreate,
-    db: Session = Depends(get_db)
-):
-    record = db.query(AcademicRecord).filter(
-        AcademicRecord.id == academic_id
-    ).first()
+# @router.put(
+#     "/academics/{academic_id}",
+#     response_model=AcademicResponse
+# )
+# def update_academic(
+#     academic_id: int,
+#     academic_data: AcademicCreate,
+#     db: Session = Depends(get_db)
+# ):
+#     record = db.query(AcademicRecord).filter(
+#         AcademicRecord.id == academic_id
+#     ).first()
 
-    if not record:
-        raise HTTPException(
-            status_code=404,
-            detail="Academic record not found"
-        )
+#     if not record:
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Academic record not found"
+#         )
 
-    for key, value in academic_data.model_dump().items():
-        setattr(record, key, value)
+#     for key, value in academic_data.model_dump().items():
+#         setattr(record, key, value)
 
-    db.commit()
-    db.refresh(record)
+#     db.commit()
+#     db.refresh(record)
 
-    return record
+#     return record
 
-@router.delete("/academics/{academic_id}")
-def delete_academic(
-    academic_id: int,
-    db: Session = Depends(get_db)
-):
-    record = db.query(AcademicRecord).filter(
-        AcademicRecord.id == academic_id
-    ).first()
+# @router.delete("/academics/{academic_id}")
+# def delete_academic(
+#     academic_id: int,
+#     db: Session = Depends(get_db)
+# ):
+#     record = db.query(AcademicRecord).filter(
+#         AcademicRecord.id == academic_id
+#     ).first()
 
-    if not record:
-        raise HTTPException(
-            status_code=404,
-            detail="Academic record not found"
-        )
+#     if not record:
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Academic record not found"
+#         )
 
-    db.delete(record)
-    db.commit()
+#     db.delete(record)
+#     db.commit()
 
-    return {
-        "message": "Academic record deleted successfully"
-    }
+#     return {
+#         "message": "Academic record deleted successfully"
+#     }
     
 @router.put(
     "/me/academics/{academic_id}",
