@@ -1,5 +1,6 @@
-from pydantic import BaseModel, ConfigDict
 from typing import Optional
+
+from pydantic import BaseModel, ConfigDict
 
 
 class ProjectCreate(BaseModel):
@@ -7,6 +8,13 @@ class ProjectCreate(BaseModel):
     description: Optional[str] = None
     technologies: Optional[str] = None
     github_url: Optional[str] = None
+
+
+class ProjectUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    technologies: str | None = None
+    github_url: str | None = None
 
 
 class ProjectResponse(ProjectCreate):

@@ -4,7 +4,10 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class SkillCreate(BaseModel):
-    name: str = Field(min_length=1, max_length=100)
+    name: str = Field(
+        min_length=1,
+        max_length=100
+    )
 
     category: Optional[str] = Field(
         default=None,
@@ -12,6 +15,25 @@ class SkillCreate(BaseModel):
     )
 
     proficiency: str = Field(
+        min_length=1,
+        max_length=50
+    )
+
+
+class SkillUpdate(BaseModel):
+    name: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=100
+    )
+
+    category: str | None = Field(
+        default=None,
+        max_length=100
+    )
+
+    proficiency: str | None = Field(
+        default=None,
         min_length=1,
         max_length=50
     )

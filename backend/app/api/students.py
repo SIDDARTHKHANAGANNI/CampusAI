@@ -5,7 +5,10 @@ from backend.app.models.user import User
 from backend.app.core.dependencies import get_current_user
 from backend.app.database.database import get_db
 from backend.app.models.student import Student
-
+from backend.app.core.dependencies import (
+    get_current_user,
+    get_current_student
+)
 from backend.app.schemas.student import (
     StudentCreate,
     StudentUpdate,
@@ -54,19 +57,8 @@ router = APIRouter(
     response_model=StudentProfileResponse
 )
 def get_my_profile(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    student: Student = Depends(get_current_student)
 ):
-    student = db.query(Student).filter(
-        Student.user_id == current_user.id
-    ).first()
-
-    if not student:
-        raise HTTPException(
-            status_code=404,
-            detail="Student profile not found"
-        )
-
     return student
 @router.post(
     "/me/profile",
