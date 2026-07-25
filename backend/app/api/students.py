@@ -1,5 +1,14 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+from backend.app.models.user import User
+from backend.app.core.dependencies import get_current_user
+from backend.app.database.database import get_db
+from backend.app.models.student import Student
+
 from backend.app.schemas.student import (
     StudentCreate,
+    StudentUpdate,
     StudentResponse,
     StudentProfileResponse
 )
@@ -65,7 +74,7 @@ def get_my_profile(
     status_code=201
 )
 def create_my_profile(
-    student_data: StudentCreate,
+    student_data: StudentUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -109,7 +118,7 @@ def update_my_profile(
             detail="Student profile not found"
         )
 
-    for key, value in student_data.model_dump().items():
+    for key, value in student_data.model_dump(exclude_unset=True).items():
         setattr(student, key, value)
 
     db.commit()
