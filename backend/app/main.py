@@ -20,6 +20,7 @@ from backend.app.core.exceptions import (
     validation_exception_handler,
     general_exception_handler,
 )
+from backend.app.core.logger import logger
 
 app = FastAPI(
     title="CampusAI API",
@@ -63,6 +64,8 @@ app.include_router(career_goals_router)
 
 @app.get("/")
 def root():
+    logger.info("Root endpoint accessed")
+    
     return {
         "message": "Welcome to CampusAI API",
         "status": "running"

@@ -6,6 +6,7 @@ from backend.app.models.student import Student
 from backend.app.models.project import Project
 
 from backend.app.core.dependencies import get_current_student
+from backend.app.core.logger import logger
 
 from backend.app.schemas.project import (
     ProjectCreate,
@@ -27,6 +28,10 @@ def get_my_projects(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Projects viewed. Student ID: {student.id}"
+    )
+
     return db.query(Project).filter(
         Project.student_id == student.id
     ).all()
@@ -42,6 +47,10 @@ def add_my_project(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Project creation attempt. Student ID: {student.id}"
+    )
+
     new_project = Project(
         student_id=student.id,
         **project.model_dump()
@@ -50,6 +59,10 @@ def add_my_project(
     db.add(new_project)
     db.commit()
     db.refresh(new_project)
+
+    logger.info(
+        f"Project created successfully. Project ID: {new_project.id}, Student ID: {student.id}"
+    )
 
     return new_project
 
@@ -60,12 +73,20 @@ def delete_my_project(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Project deletion attempt. Project ID: {project_id}, Student ID: {student.id}"
+    )
+
     project = db.query(Project).filter(
         Project.id == project_id,
         Project.student_id == student.id
     ).first()
 
     if not project:
+        logger.warning(
+            f"Project deletion failed. Project ID: {project_id} not found for Student ID: {student.id}"
+        )
+
         raise HTTPException(
             status_code=404,
             detail="Project not found"
@@ -73,6 +94,10 @@ def delete_my_project(
 
     db.delete(project)
     db.commit()
+
+    logger.info(
+        f"Project deleted successfully. Project ID: {project_id}, Student ID: {student.id}"
+    )
 
     return {
         "message": "Project deleted successfully"
@@ -88,11 +113,19 @@ def get_projects(
     student_id: int,
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Public projects requested. Student ID: {student_id}"
+    )
+
     student = db.query(Student).filter(
         Student.id == student_id
     ).first()
 
     if not student:
+        logger.warning(
+            f"Public projects request failed. Student ID: {student_id} not found"
+        )
+
         raise HTTPException(
             status_code=404,
             detail="Student not found"
@@ -115,12 +148,20 @@ def update_my_project(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Project update attempt. Project ID: {project_id}, Student ID: {student.id}"
+    )
+
     project = db.query(Project).filter(
         Project.id == project_id,
         Project.student_id == student.id
     ).first()
 
     if not project:
+        logger.warning(
+            f"Project update failed. Project ID: {project_id} not found for Student ID: {student.id}"
+        )
+
         raise HTTPException(
             status_code=404,
             detail="Project not found"
@@ -131,5 +172,9 @@ def update_my_project(
 
     db.commit()
     db.refresh(project)
+
+    logger.info(
+        f"Project updated successfully. Project ID: {project.id}, Student ID: {student.id}"
+    )
 
     return project

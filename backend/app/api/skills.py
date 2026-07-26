@@ -12,6 +12,7 @@ from backend.app.schemas.skill import (
 )
 
 from backend.app.core.dependencies import get_current_student
+from backend.app.core.logger import logger
 
 router = APIRouter(
     prefix="/students",
@@ -27,6 +28,10 @@ def get_my_skills(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Skills viewed. Student ID: {student.id}"
+    )
+
     return db.query(Skill).filter(
         Skill.student_id == student.id
     ).all()
@@ -42,6 +47,10 @@ def add_my_skill(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Skill creation attempt. Student ID: {student.id}"
+    )
+
     new_skill = Skill(
         student_id=student.id,
         **skill.model_dump()
@@ -50,6 +59,10 @@ def add_my_skill(
     db.add(new_skill)
     db.commit()
     db.refresh(new_skill)
+
+    logger.info(
+        f"Skill created successfully. Skill ID: {new_skill.id}, Student ID: {student.id}"
+    )
 
     return new_skill
 
@@ -63,11 +76,19 @@ def get_skills(
     student_id: int,
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Public skills requested. Student ID: {student_id}"
+    )
+
     student = db.query(Student).filter(
         Student.id == student_id
     ).first()
 
     if not student:
+        logger.warning(
+            f"Public skills request failed. Student ID: {student_id} not found"
+        )
+
         raise HTTPException(
             status_code=404,
             detail="Student not found"
@@ -90,12 +111,20 @@ def update_my_skill(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Skill update attempt. Skill ID: {skill_id}, Student ID: {student.id}"
+    )
+
     skill = db.query(Skill).filter(
         Skill.id == skill_id,
         Skill.student_id == student.id
     ).first()
 
     if not skill:
+        logger.warning(
+            f"Skill update failed. Skill ID: {skill_id} not found for Student ID: {student.id}"
+        )
+
         raise HTTPException(
             status_code=404,
             detail="Skill not found"
@@ -106,5 +135,9 @@ def update_my_skill(
 
     db.commit()
     db.refresh(skill)
+
+    logger.info(
+        f"Skill updated successfully. Skill ID: {skill.id}, Student ID: {student.id}"
+    )
 
     return skill

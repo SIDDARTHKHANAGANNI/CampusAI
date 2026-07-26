@@ -4,10 +4,9 @@ from sqlalchemy.orm import Session
 from backend.app.database.database import get_db
 from backend.app.models.student import Student
 from backend.app.models.academic import AcademicRecord
-from backend.app.core.dependencies import (
-    get_current_user,
-    get_current_student
-)
+
+from backend.app.core.dependencies import get_current_student
+from backend.app.core.logger import logger
 
 from backend.app.schemas.academic import (
     AcademicCreate,
@@ -29,6 +28,10 @@ def get_my_academics(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Academic records viewed. Student ID: {student.id}"
+    )
+
     return db.query(AcademicRecord).filter(
         AcademicRecord.student_id == student.id
     ).all()
@@ -44,6 +47,10 @@ def add_my_academic(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Academic record creation attempt. Student ID: {student.id}"
+    )
+
     new_academic = AcademicRecord(
         student_id=student.id,
         **academic.model_dump()
@@ -52,6 +59,10 @@ def add_my_academic(
     db.add(new_academic)
     db.commit()
     db.refresh(new_academic)
+
+    logger.info(
+        f"Academic record created successfully. Record ID: {new_academic.id}, Student ID: {student.id}"
+    )
 
     return new_academic
 
@@ -62,12 +73,20 @@ def delete_my_academic(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Academic record deletion attempt. Record ID: {academic_id}, Student ID: {student.id}"
+    )
+
     academic = db.query(AcademicRecord).filter(
         AcademicRecord.id == academic_id,
         AcademicRecord.student_id == student.id
     ).first()
 
     if not academic:
+        logger.warning(
+            f"Academic record deletion failed. Record ID: {academic_id} not found for Student ID: {student.id}"
+        )
+
         raise HTTPException(
             status_code=404,
             detail="Academic record not found"
@@ -75,6 +94,10 @@ def delete_my_academic(
 
     db.delete(academic)
     db.commit()
+
+    logger.info(
+        f"Academic record deleted successfully. Record ID: {academic_id}, Student ID: {student.id}"
+    )
 
     return {
         "message": "Academic record deleted successfully"
@@ -89,6 +112,10 @@ def get_academic_records(
     student_id: int,
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Public academic records requested. Student ID: {student_id}"
+    )
+
     return (
         db.query(AcademicRecord)
         .filter(AcademicRecord.student_id == student_id)
@@ -106,12 +133,20 @@ def update_my_academic(
     student: Student = Depends(get_current_student),
     db: Session = Depends(get_db)
 ):
+    logger.info(
+        f"Academic record update attempt. Record ID: {academic_id}, Student ID: {student.id}"
+    )
+
     record = db.query(AcademicRecord).filter(
         AcademicRecord.id == academic_id,
         AcademicRecord.student_id == student.id
     ).first()
 
     if not record:
+        logger.warning(
+            f"Academic record update failed. Record ID: {academic_id} not found for Student ID: {student.id}"
+        )
+
         raise HTTPException(
             status_code=404,
             detail="Academic record not found"
@@ -122,5 +157,9 @@ def update_my_academic(
 
     db.commit()
     db.refresh(record)
+
+    logger.info(
+        f"Academic record updated successfully. Record ID: {record.id}, Student ID: {student.id}"
+    )
 
     return record
