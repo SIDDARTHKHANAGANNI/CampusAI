@@ -6,14 +6,8 @@ from backend.app.schemas.academic import AcademicResponse
 from backend.app.schemas.skill import SkillResponse
 from backend.app.schemas.project import ProjectResponse
 from backend.app.schemas.career_goal import CareerGoalResponse
-from typing import List, Optional
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from backend.app.schemas.academic import AcademicResponse
-from backend.app.schemas.skill import SkillResponse
-from backend.app.schemas.project import ProjectResponse
-from backend.app.schemas.career_goal import CareerGoalResponse
 
 class StudentCreate(BaseModel):
     name: str = Field(min_length=2, max_length=100)

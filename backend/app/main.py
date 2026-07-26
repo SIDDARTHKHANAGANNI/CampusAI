@@ -20,13 +20,22 @@ from backend.app.core.exceptions import (
     validation_exception_handler,
     general_exception_handler,
 )
+
 from backend.app.core.logger import logger
+from backend.app.core.middleware import RequestLoggingMiddleware
+
 
 app = FastAPI(
     title="CampusAI API",
     description="Backend API for CampusAI Student Success & Career Platform",
     version="0.3.0"
 )
+
+
+# -----------------------------
+# Middleware
+# -----------------------------
+app.add_middleware(RequestLoggingMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,7 +47,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# -----------------------------
 # Global Exception Handlers
+# -----------------------------
 app.add_exception_handler(
     HTTPException,
     http_exception_handler
@@ -54,6 +66,10 @@ app.add_exception_handler(
     general_exception_handler
 )
 
+
+# -----------------------------
+# Routers
+# -----------------------------
 app.include_router(auth_router)
 app.include_router(student_router)
 app.include_router(academics_router)
@@ -62,28 +78,39 @@ app.include_router(projects_router)
 app.include_router(career_goals_router)
 
 
+# -----------------------------
+# Root Endpoint
+# -----------------------------
 @app.get("/")
 def root():
     logger.info("Root endpoint accessed")
-    
+
     return {
         "message": "Welcome to CampusAI API",
         "status": "running"
     }
 
 
+# -----------------------------
+# Health Check
+# -----------------------------
 @app.get("/health")
 def health_check():
     return {
         "status": "healthy"
     }
-    
+
+
+# -----------------------------
+# Testing Endpoints
+# -----------------------------
 @app.get("/test-http")
 def test_http():
     raise HTTPException(
         status_code=404,
         detail="This is a test"
     )
+
 
 @app.get("/test-error")
 def test_error():
