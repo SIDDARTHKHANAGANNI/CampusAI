@@ -1,0 +1,11 @@
+services:
+  campusai-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    env_file:
+      - backend/.env
+
+    ports:
+      - "8000:8000"
