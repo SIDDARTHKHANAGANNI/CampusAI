@@ -13,15 +13,19 @@ on:
 
 jobs:
   backend-tests:
-
     runs-on: ubuntu-latest
 
     defaults:
       run:
         working-directory: backend
 
-    steps:
+    env:
+      DATABASE_URL: sqlite:///./test.db
+      SECRET_KEY: test-secret-key
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      ALGORITHM: HS256
 
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -41,4 +45,4 @@ jobs:
 
       - name: Run Coverage
         run: |
-          python -m pytest --cov=backend/app --cov-report=term
+          python -m pytest --cov=app --cov-report=term --cov-report=xml --cov-report=html
