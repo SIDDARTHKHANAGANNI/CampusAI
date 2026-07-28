@@ -64,11 +64,12 @@ def register(
         )
 
     new_user = User(
-        email=user_data.email,
-        hashed_password=hash_password(
-            user_data.password
-        )
+    name=user_data.name,
+    email=user_data.email,
+    hashed_password=hash_password(
+        user_data.password
     )
+)
 
     db.add(new_user)
     db.commit()
