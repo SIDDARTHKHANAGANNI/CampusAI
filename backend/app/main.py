@@ -40,7 +40,8 @@ app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000"
+        "http://localhost:5173",   # Local Vite frontend
+        "http://localhost:3000",   # Optional if you ever use CRA
     ],
     allow_credentials=True,
     allow_methods=["*"],
