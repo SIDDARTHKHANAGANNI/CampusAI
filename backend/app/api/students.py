@@ -45,7 +45,7 @@ def get_my_profile(
     status_code=201
 )
 def create_my_profile(
-    student_data: StudentUpdate,
+    student_data: StudentCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -88,7 +88,7 @@ def create_my_profile(
     response_model=StudentResponse
 )
 def update_my_profile(
-    student_data: StudentCreate,
+    student_data: StudentUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
