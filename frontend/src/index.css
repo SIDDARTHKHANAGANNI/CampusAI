@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+:root {
+  --olive: #8a9a5b;
+  --olive-dark: #6b7a3f;
+  --olive-light: #f0f4e8;
+  --olive-mid: #d4dfc4;
+  --beige: #f5f0e8;
+  --beige-dark: #e8e0d0;
+  --black: #1a1a1a;
+  --white: #ffffff;
+}
+
+body {
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  background-color: var(--white);
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 999px;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}

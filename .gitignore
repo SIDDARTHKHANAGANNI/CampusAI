@@ -1,6 +1,7 @@
 # Python virtual environment
 .venv/
 venv/
+frontend/node_modules/
 
 # Python cache
 __pycache__/
