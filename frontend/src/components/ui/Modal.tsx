@@ -24,17 +24,17 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
   if (!open) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm transition-opacity">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm transition-opacity">
       <div 
-        className="bg-white rounded-2xl border border-stone-200 shadow-sm w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden"
+        className="bg-white rounded-2xl border border-slate-200 shadow-sm w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden"
         role="dialog"
         aria-modal="true"
       >
-        <div className="flex items-center justify-between p-6 border-b border-stone-100">
-          <h2 className="text-lg font-semibold text-stone-800">{title}</h2>
+        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+          <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
           <button
             onClick={onClose}
-            className="text-stone-400 hover:text-stone-600 transition-colors p-1 rounded-lg hover:bg-stone-50"
+            className="text-slate-500 hover:text-slate-900 transition-colors p-1 rounded-lg hover:bg-slate-100"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />

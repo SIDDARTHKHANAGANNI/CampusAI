@@ -8,7 +8,7 @@ interface SpinnerProps {
 export function Spinner({ className }: SpinnerProps) {
   return (
     <div className={cn("flex justify-center items-center p-4", className)}>
-      <Loader2 className="w-6 h-6 animate-spin text-violet-500" />
+      <Loader2 className="w-6 h-6 animate-spin text-slate-900" />
     </div>
   );
 }

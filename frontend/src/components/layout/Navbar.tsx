@@ -10,25 +10,25 @@ export default function Navbar({ onToggleSidebar }: Props) {
   const { user } = useAuth();
 
   return (
-    <header className="h-16 bg-white border-b border-stone-200 flex items-center justify-between px-6">
+    <header className="h-16 bg-white border-b border-[#dde0d5] flex items-center justify-between px-6">
       <div className="flex items-center gap-3">
         <button
           onClick={onToggleSidebar}
-          className="lg:hidden text-stone-400 hover:text-stone-600 transition-colors"
+          className="lg:hidden text-slate-500 hover:text-slate-900 transition-colors"
         >
           <Menu size={22} />
         </button>
-        <span className="text-lg font-bold text-violet-600 lg:hidden">CampusAI</span>
+        <span className="text-lg font-bold text-[#343A40] lg:hidden">CampusAI</span>
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="text-sm font-medium text-stone-500 hidden sm:block">
+        <span className="text-sm font-medium text-[#6c757d] hidden sm:block">
           {user?.name}
         </span>
         <img
           src={getAvatarUrl(user?.name || "User")}
           alt="Avatar"
-          className="w-8 h-8 rounded-full bg-violet-50"
+          className="w-8 h-8 rounded-full bg-[#E8F5EE]"
         />
       </div>
     </header>

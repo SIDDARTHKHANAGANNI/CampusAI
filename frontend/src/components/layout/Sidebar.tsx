@@ -39,14 +39,14 @@ export default function Sidebar({ open, onClose }: Props) {
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-40 h-full w-64 bg-white border-r border-stone-200 flex flex-col transition-transform duration-200 lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-40 h-full w-64 bg-white border-r border-[#dde0d5] flex flex-col transition-transform duration-200 lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Brand */}
-        <div className="flex items-center justify-between px-6 h-16 border-b border-stone-100">
-          <span className="text-xl font-bold text-violet-600">CampusAI</span>
-          <button onClick={onClose} className="lg:hidden text-stone-400 hover:text-stone-600">
+        <div className="flex items-center justify-between px-6 h-16 border-b border-[#e8ebe3]">
+          <span className="text-xl font-bold text-[#343A40]">CampusAI</span>
+          <button onClick={onClose} className="lg:hidden text-[#8d9490] hover:text-[#343A40]">
             <X size={20} />
           </button>
         </div>
@@ -61,8 +61,8 @@ export default function Sidebar({ open, onClose }: Props) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-violet-50 text-violet-600"
-                    : "text-stone-500 hover:bg-violet-50 hover:text-violet-600"
+                    ? "bg-slate-900 text-white"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                 }`
               }
             >
@@ -73,10 +73,10 @@ export default function Sidebar({ open, onClose }: Props) {
         </nav>
 
         {/* Logout */}
-        <div className="px-3 py-4 border-t border-stone-100">
+        <div className="px-3 py-4 border-t border-[#e8ebe3]">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-stone-400 hover:text-rose-500 hover:bg-rose-50 transition-colors w-full"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-[#8d9490] hover:text-[#8B4513] hover:bg-[#FFF5F0] transition-colors w-full"
           >
             <LogOut size={18} />
             Logout

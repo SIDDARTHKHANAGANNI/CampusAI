@@ -40,37 +40,37 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6">
       {/* Header Card */}
-      <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 flex flex-col sm:flex-row items-center gap-6">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col sm:flex-row items-center gap-6">
         <img
           src={getAvatarUrl(profile.name)}
           alt="Avatar"
-          className="w-20 h-20 rounded-full bg-violet-50"
+          className="w-20 h-20 rounded-full bg-slate-100"
         />
         <div className="flex-1 text-center sm:text-left">
-          <h1 className="text-2xl font-semibold text-stone-800">{profile.name}</h1>
-          <p className="text-stone-400 text-sm">{profile.branch} • Year {profile.current_year}</p>
-          <p className="text-stone-400 text-sm">{profile.college}</p>
+          <h1 className="text-2xl font-semibold text-slate-900">{profile.name}</h1>
+          <p className="text-slate-500 text-sm">{profile.branch} • Year {profile.current_year}</p>
+          <p className="text-slate-500 text-sm">{profile.college}</p>
         </div>
         <Link
           to="/profile/edit"
-          className="bg-violet-500 hover:bg-violet-600 text-white font-medium px-5 py-2 rounded-xl transition-colors flex items-center gap-2 text-sm"
+          className="bg-slate-900 hover:bg-slate-800 text-white font-medium px-5 py-2 rounded-xl transition-colors flex items-center gap-2 text-sm"
         >
           <Pencil size={16} /> Edit Profile
         </Link>
       </div>
 
       {/* Info Grid */}
-      <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-stone-700 mb-4">Profile Details</h2>
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-slate-900 mb-4">Profile Details</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {fields.map((f) => (
-            <div key={f.label} className="flex items-center gap-3 p-3 rounded-xl bg-stone-50">
-              <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center text-violet-400">
+            <div key={f.label} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-900">
                 <f.icon size={16} />
               </div>
               <div>
-                <p className="text-xs font-medium text-stone-400">{f.label}</p>
-                <p className="text-sm font-semibold text-stone-700">{f.value}</p>
+                <p className="text-xs font-medium text-slate-500">{f.label}</p>
+                <p className="text-sm font-semibold text-slate-900">{f.value}</p>
               </div>
             </div>
           ))}

@@ -51,29 +51,29 @@ export default function SkillsPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Skills" description="Manage your technical skills" action={
-        <button onClick={openAdd} className="bg-violet-500 hover:bg-violet-600 text-white font-medium px-4 py-2 rounded-xl transition-colors flex items-center gap-2 text-sm">
+        <button onClick={openAdd} className="bg-slate-900 hover:bg-slate-800 text-white font-medium px-4 py-2 rounded-xl transition-colors flex items-center gap-2 text-sm">
           <Plus size={16} /> Add Skill
         </button>
       } />
 
-      {error && <div className="bg-rose-50 text-rose-600 text-sm font-medium px-4 py-3 rounded-xl">{error}</div>}
+      {error && <div className="bg-red-50 text-red-700 text-sm font-medium px-4 py-3 rounded-xl">{error}</div>}
 
       {skills.length === 0 ? (
         <EmptyState icon={Code2} title="No skills yet" description="Add your first skill to get started" action={
-          <button onClick={openAdd} className="bg-violet-500 hover:bg-violet-600 text-white font-medium px-4 py-2 rounded-xl transition-colors text-sm">Add Skill</button>
+          <button onClick={openAdd} className="bg-slate-900 hover:bg-slate-800 text-white font-medium px-4 py-2 rounded-xl transition-colors text-sm">Add Skill</button>
         } />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {skills.map((s) => (
-            <div key={s.id} className="bg-white rounded-2xl border border-stone-200 p-5 flex flex-col gap-3">
+            <div key={s.id} className="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col gap-3">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-stone-700 text-sm">{s.name}</h3>
-                  {s.category && <span className="text-xs font-medium text-violet-500 bg-violet-50 px-2 py-0.5 rounded-lg mt-1 inline-block">{s.category}</span>}
+                  <h3 className="font-semibold text-slate-900 text-sm">{s.name}</h3>
+                  {s.category && <span className="text-xs font-medium text-slate-900 bg-slate-100 px-2 py-0.5 rounded-lg mt-1 inline-block">{s.category}</span>}
                 </div>
-                <button onClick={() => openEdit(s)} className="text-stone-300 hover:text-violet-500 transition-colors"><Pencil size={14} /></button>
+                <button onClick={() => openEdit(s)} className="text-slate-400 hover:text-slate-900 transition-colors"><Pencil size={14} /></button>
               </div>
-              <span className="text-xs font-medium text-stone-400 bg-stone-50 px-2.5 py-1 rounded-lg self-start">{s.proficiency}</span>
+              <span className="text-xs font-medium text-slate-500 bg-slate-50 px-2.5 py-1 rounded-lg self-start">{s.proficiency}</span>
             </div>
           ))}
         </div>
@@ -82,22 +82,22 @@ export default function SkillsPage() {
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Edit Skill" : "Add Skill"}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-stone-500 mb-1.5 block">Skill Name</label>
-            <input type="text" {...register("name")} className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 transition-all text-sm" />
-            {errors.name && <p className="text-rose-500 text-xs mt-1">{errors.name.message}</p>}
+            <label className="text-sm font-medium text-slate-600 mb-1.5 block">Skill Name</label>
+            <input type="text" {...register("name")} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-400 transition-all text-sm" />
+            {errors.name && <p className="text-red-600 text-xs mt-1">{errors.name.message}</p>}
           </div>
           <div>
-            <label className="text-sm font-medium text-stone-500 mb-1.5 block">Category (optional)</label>
-            <input type="text" {...register("category")} placeholder="e.g. Frontend, Backend" className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 transition-all text-sm" />
+            <label className="text-sm font-medium text-slate-600 mb-1.5 block">Category (optional)</label>
+            <input type="text" {...register("category")} placeholder="e.g. Frontend, Backend" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-400 transition-all text-sm" />
           </div>
           <div>
-            <label className="text-sm font-medium text-stone-500 mb-1.5 block">Proficiency</label>
-            <select {...register("proficiency")} className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 transition-all text-sm">
+            <label className="text-sm font-medium text-slate-600 mb-1.5 block">Proficiency</label>
+            <select {...register("proficiency")} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-400 transition-all text-sm">
               {proficiencyLevels.map((l) => <option key={l} value={l}>{l}</option>)}
             </select>
-            {errors.proficiency && <p className="text-rose-500 text-xs mt-1">{errors.proficiency.message}</p>}
+            {errors.proficiency && <p className="text-red-600 text-xs mt-1">{errors.proficiency.message}</p>}
           </div>
-          <button type="submit" disabled={isSubmitting} className="w-full bg-violet-500 hover:bg-violet-600 disabled:opacity-60 text-white font-medium py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+          <button type="submit" disabled={isSubmitting} className="w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white font-medium py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
             {isSubmitting && <Loader2 size={16} className="animate-spin" />}
             {isSubmitting ? "Saving..." : editing ? "Update Skill" : "Add Skill"}
           </button>

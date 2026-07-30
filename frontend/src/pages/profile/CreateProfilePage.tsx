@@ -41,17 +41,17 @@ export default function CreateProfilePage() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-stone-800">Create Your Profile</h1>
-        <p className="text-stone-400 text-sm mt-1">Fill in your details to get started</p>
+        <h1 className="text-2xl font-semibold text-slate-900">Create Your Profile</h1>
+        <p className="text-slate-500 text-sm mt-1">Fill in your details to get started</p>
       </div>
 
       {error && (
-        <div className="bg-rose-50 text-rose-600 text-sm font-medium px-4 py-3 rounded-xl">{error}</div>
+        <div className="bg-red-50 text-red-700 text-sm font-medium px-4 py-3 rounded-xl">{error}</div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider">Personal</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Personal</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Full Name" error={errors.name?.message}>
               <input type="text" {...register("name")} className="input-field" />
@@ -65,8 +65,8 @@ export default function CreateProfilePage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider">Academic</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Academic</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Degree" error={errors.degree?.message}>
               <input type="text" {...register("degree")} placeholder="e.g. B.Tech" className="input-field" />
@@ -92,8 +92,8 @@ export default function CreateProfilePage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 space-y-4">
-          <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider">Career</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Career</h2>
           <Field label="Target Role" error={errors.target_role?.message}>
             <input type="text" {...register("target_role")} placeholder="e.g. Software Engineer" className="input-field" />
           </Field>
@@ -102,14 +102,14 @@ export default function CreateProfilePage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-violet-500 hover:bg-violet-600 disabled:opacity-60 text-white font-medium py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white font-medium py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {isSubmitting && <Loader2 size={16} className="animate-spin" />}
           {isSubmitting ? "Creating..." : "Create Profile"}
         </button>
       </form>
 
-      <style>{`.input-field { width: 100%; background: #fafaf9; border: 1px solid #e7e5e4; border-radius: 0.75rem; padding: 0.625rem 1rem; outline: none; font-size: 0.875rem; transition: all 0.15s; } .input-field:focus { box-shadow: 0 0 0 2px #ede9fe; border-color: #a78bfa; }`}</style>
+      <style>{`.input-field { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.625rem 1rem; outline: none; font-size: 0.875rem; transition: all 0.15s; } .input-field:focus { box-shadow: 0 0 0 2px #e2e8f0; border-color: #94a3b8; }`}</style>
     </div>
   );
 }
@@ -117,9 +117,9 @@ export default function CreateProfilePage() {
 function Field({ label, error, full, children }: { label: string; error?: string; full?: boolean; children: React.ReactNode }) {
   return (
     <div className={full ? "sm:col-span-2" : ""}>
-      <label className="text-sm font-medium text-stone-500 mb-1.5 block">{label}</label>
+      <label className="text-sm font-medium text-slate-600 mb-1.5 block">{label}</label>
       {children}
-      {error && <p className="text-rose-500 text-xs mt-1">{error}</p>}
+      {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
     </div>
   );
 }
