@@ -8,12 +8,15 @@ from backend.app.api.skills import router as skills_router
 from backend.app.api.projects import router as projects_router
 from backend.app.api.career_goals import router as career_goals_router
 from backend.app.api.auth import router as auth_router
+from backend.app.api.ml import router as ml_router
+from backend.app.api.resume import router as resume_router
 
 from backend.app.models.student import Student
 from backend.app.models.academic import AcademicRecord
 from backend.app.models.skill import Skill
 from backend.app.models.project import Project
 from backend.app.models.career_goal import CareerGoal
+from backend.app.models.resume import Resume
 
 from backend.app.core.exceptions import (
     http_exception_handler,
@@ -77,7 +80,8 @@ app.include_router(academics_router)
 app.include_router(skills_router)
 app.include_router(projects_router)
 app.include_router(career_goals_router)
-
+app.include_router(ml_router)
+app.include_router(resume_router)
 
 # -----------------------------
 # Root Endpoint

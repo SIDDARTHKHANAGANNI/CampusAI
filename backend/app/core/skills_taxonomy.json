@@ -1,0 +1,5 @@
+{
+  "backend": ["Python", "Java", "Node.js", "REST API", "Docker", "Kubernetes", "SQL", "PostgreSQL", "MongoDB", "AWS", "CI/CD", "Redis"],
+  "frontend": ["React", "TypeScript", "JavaScript", "CSS", "Next.js", "Redux"],
+  "ml": ["Python", "TensorFlow", "PyTorch", "Scikit-learn", "Pandas", "NumPy", "NLP", "Computer Vision"]
+}

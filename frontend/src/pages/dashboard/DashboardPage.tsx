@@ -7,7 +7,7 @@ import { Spinner } from "@/components/ui/Spinner";
 import {
   TrendingUp, BarChart3, AlertTriangle, Calendar,
   Code2, FolderGit2, GraduationCap, Target, FileText, Compass,
-  ArrowRight, UserPlus,
+  ArrowRight, UserPlus, Briefcase, Route, Sparkles,
 } from "lucide-react";
 
 const quickLinks = [
@@ -15,8 +15,15 @@ const quickLinks = [
   { to: "/projects", icon: FolderGit2, label: "Projects", desc: "Showcase your work", color: "bg-slate-100 text-slate-900" },
   { to: "/academics", icon: GraduationCap, label: "Academics", desc: "Track semester records", color: "bg-slate-100 text-slate-900" },
   { to: "/career-goals", icon: Target, label: "Career Goals", desc: "Plan your future", color: "bg-slate-100 text-slate-900" },
-  { to: "/resume-score", icon: FileText, label: "Resume Score", desc: "ATS compatibility check", color: "bg-slate-100 text-slate-900" },
-  { to: "/target-role", icon: Compass, label: "Target Role", desc: "Readiness analysis", color: "bg-slate-100 text-slate-900" },
+];
+
+const mlLinks = [
+  { to: "/resume-analysis", icon: FileText, label: "Resume Analysis", desc: "AI-powered resume feedback", color: "bg-[#E8F5EE] text-[#343A40]" },
+  { to: "/resume-matching", icon: Briefcase, label: "Resume–Job Matching", desc: "Match resume to job descriptions", color: "bg-[#E8F5EE] text-[#343A40]" },
+  { to: "/placement-readiness", icon: Compass, label: "Placement Readiness", desc: "Predict placement preparedness", color: "bg-[#E8F5EE] text-[#343A40]" },
+  { to: "/academic-risk", icon: AlertTriangle, label: "Academic Risk", desc: "Early risk detection", color: "bg-[#E8F5EE] text-[#343A40]" },
+  { to: "/learning-path", icon: Route, label: "Learning Path", desc: "Personalized skill roadmap", color: "bg-[#E8F5EE] text-[#343A40]" },
+  { to: "/career-recommendation", icon: Sparkles, label: "Career Recommendation", desc: "Discover ideal career paths", color: "bg-[#E8F5EE] text-[#343A40]" },
 ];
 
 export default function DashboardPage() {
@@ -90,7 +97,7 @@ export default function DashboardPage() {
       {/* Quick Links */}
       <div>
         <h2 className="text-lg font-semibold text-slate-900 mb-4">Quick Access</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickLinks.map((l) => (
             <Link
               key={l.to}
@@ -106,6 +113,32 @@ export default function DashboardPage() {
                   <p className="text-xs text-slate-500 mt-0.5">{l.desc}</p>
                 </div>
                 <ArrowRight size={16} className="text-slate-400 group-hover:text-slate-900 transition-colors" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* AI Features */}
+      <div>
+        <h2 className="text-lg font-semibold text-slate-900 mb-1">AI Features</h2>
+        <p className="text-sm text-slate-500 mb-4">ML-powered tools to boost your career readiness</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {mlLinks.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="bg-white rounded-2xl border border-[#B7E4C7]/40 p-5 hover:border-[#B7E4C7] transition-colors group"
+            >
+              <div className={`w-10 h-10 rounded-xl ${l.color} flex items-center justify-center mb-3`}>
+                <l.icon size={20} />
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-slate-900 text-sm">{l.label}</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">{l.desc}</p>
+                </div>
+                <ArrowRight size={16} className="text-[#B7E4C7] group-hover:text-[#343A40] transition-colors" />
               </div>
             </Link>
           ))}

@@ -1,0 +1,5 @@
+{
+  "Backend Developer": ["Python", "Java", "REST API", "SQL", "Docker", "Kubernetes", "System Design", "Microservices", "AWS"],
+  "Full Stack Developer": ["React", "Node.js", "SQL", "REST API", "Docker", "Git"],
+  "ML Engineer": ["Python", "TensorFlow", "PyTorch", "Scikit-learn", "Pandas", "SQL", "Docker", "MLOps"]
+}

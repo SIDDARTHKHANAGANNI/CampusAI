@@ -13,10 +13,14 @@ import SkillsPage from "@/pages/skills/SkillsPage";
 import ProjectsPage from "@/pages/projects/ProjectsPage";
 import AcademicsPage from "@/pages/academics/AcademicsPage";
 import CareerGoalsPage from "@/pages/career/CareerGoalsPage";
-import ResumeScorePage from "@/pages/resume/ResumeScorePage";
-import ResumeMatchPage from "@/pages/resume/ResumeMatchPage";
-import TargetRolePage from "@/pages/resume/TargetRolePage";
+import ResumeAnalysisPage from "@/pages/resume/ResumeScorePage";
+import ResumeMatchingPage from "@/pages/resume/ResumeMatchPage";
+import PlacementReadinessPage from "@/pages/resume/TargetRolePage";
+import AcademicRiskPage from "@/pages/ml/AcademicRiskPage";
+import LearningPathPage from "@/pages/ml/LearningPathPage";
+import CareerRecommendationPage from "@/pages/ml/CareerRecommendationPage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import LandingPage from "@/pages/LandingPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { token, isLoading } = useAuth();
@@ -63,12 +67,16 @@ export default function App() {
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/academics" element={<AcademicsPage />} />
         <Route path="/career-goals" element={<CareerGoalsPage />} />
-        <Route path="/resume-score" element={<ResumeScorePage />} />
-        <Route path="/resume-match" element={<ResumeMatchPage />} />
-        <Route path="/target-role" element={<TargetRolePage />} />
+        {/* ML Features */}
+        <Route path="/resume-analysis" element={<ResumeAnalysisPage />} />
+        <Route path="/resume-matching" element={<ResumeMatchingPage />} />
+        <Route path="/placement-readiness" element={<PlacementReadinessPage />} />
+        <Route path="/academic-risk" element={<AcademicRiskPage />} />
+        <Route path="/learning-path" element={<LearningPathPage />} />
+        <Route path="/career-recommendation" element={<CareerRecommendationPage />} />
       </Route>
 
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
