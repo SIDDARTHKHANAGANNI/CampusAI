@@ -50,14 +50,21 @@ class MLService:
         keywords_found = []
         keywords_missing = []
         
-        if target_role and target_role in ROLE_SKILL_MAPPING:
-            target_skills = ROLE_SKILL_MAPPING[target_role]
-            for skill in target_skills:
-                if skill.lower() in text_lower:
-                    keywords_found.append(skill)
-                else:
-                    keywords_missing.append(skill)
-                    suggestions.append(f"Consider adding or learning '{skill}' for {target_role} roles.")
+        if target_role:
+                    matched_role = next(
+                        (r for r in ROLE_SKILL_MAPPING if r.lower() == target_role.strip().lower()),
+                        None
+                    )
+                    if matched_role:
+                        target_skills = ROLE_SKILL_MAPPING[matched_role]
+                        for skill in target_skills:
+                            if skill.lower() in text_lower:
+                                keywords_found.append(skill)
+                            else:
+                                keywords_missing.append(skill)
+                                suggestions.append(f"Consider adding or learning '{skill}' for {matched_role} roles.")
+                    else:
+                        suggestions.append(f"Target role '{target_role}' not recognized. Supported roles: {', '.join(ROLE_SKILL_MAPPING.keys())}")
         
         return {
             "overall_score": overall_score,

@@ -52,17 +52,14 @@ class LearningPathStep(BaseModel):
 
 class LearningPathResponse(BaseModel):
     steps: List[LearningPathStep]
-
 class CareerRecommendationRequest(BaseModel):
     interests: Optional[str] = None
     preferred_company_type: Optional[str] = None
-
 class CareerRecommendationItem(BaseModel):
     role: str
     match_percentage: float
     description: str
     required_skills: List[str]
     skill_gaps: List[str]
-
 class CareerRecommendationResponse(BaseModel):
     recommendations: List[CareerRecommendationItem]

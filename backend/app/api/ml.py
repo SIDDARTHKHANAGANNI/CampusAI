@@ -10,6 +10,7 @@ from backend.app.schemas.ml import (
     LearningPathRequest, LearningPathResponse,
     CareerRecommendationRequest, CareerRecommendationResponse
 )
+
 from backend.app.services.ml_service import MLService
 from backend.app.core.dependencies import get_current_student
 from backend.app.database.database import get_db
@@ -19,6 +20,8 @@ from backend.app.models.skill import Skill
 from backend.app.models.project import Project
 from backend.app.models.academic import AcademicRecord
 from backend.app.models.career_goal import CareerGoal
+from fastapi import UploadFile, File, Form
+from backend.app.services.file_parser import extract_text_from_file
 
 router = APIRouter(prefix="/ml", tags=["ML Features"])
 
@@ -114,3 +117,21 @@ async def career_recommendation(
     except Exception as e:
         logger.error(f"Error recommending careers: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to recommend careers")
+    
+@router.post("/resume-analysis-file", response_model=ResumeAnalysisResponse)
+async def analyze_resume_file(
+    file: UploadFile = File(...),
+    target_role: str = Form(None),
+    current_student = Depends(get_current_student)
+):
+    try:
+        file_bytes = await file.read()
+        resume_text = extract_text_from_file(file_bytes, file.filename)
+        logger.info(f"Analyzing uploaded resume for student: {current_student.id}")
+        result = MLService.analyze_resume(resume_text, target_role)
+        return ResumeAnalysisResponse(**result)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error analyzing resume file: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to analyze resume file")

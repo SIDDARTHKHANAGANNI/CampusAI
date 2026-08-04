@@ -32,15 +32,21 @@ async def validation_exception_handler(
         f"Errors: {exc.errors()}"
     )
 
+    safe_errors = []
+    for err in exc.errors():
+        err_copy = dict(err)
+        if "ctx" in err_copy and "error" in err_copy["ctx"]:
+            err_copy["ctx"] = {**err_copy["ctx"], "error": str(err_copy["ctx"]["error"])}
+        safe_errors.append(err_copy)
+
     return JSONResponse(
         status_code=422,
         content={
             "success": False,
             "message": "Validation Error",
-            "errors": exc.errors()
+            "errors": safe_errors
         }
     )
-
 
 async def general_exception_handler(
     request: Request,
